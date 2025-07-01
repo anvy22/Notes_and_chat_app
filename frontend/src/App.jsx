@@ -23,10 +23,10 @@ const AppContent = () => {
   }, [isDark]);
 
   return (
-    <div className={`h-screen flex ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen flex  ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <SignedIn>
         <Sidebar />
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 relative">
           <Routes>
             <Route path="/" element={<Navigate to="/chats" replace />} />
             <Route path="/chats" element={<ChatsPage />} />

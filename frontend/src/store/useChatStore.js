@@ -5,6 +5,8 @@ export const useChatStore = create((set, get) => ({
   activeChat: null,
   messages: {},
   users: [],
+  showCreateModal: false,
+  createModalType: 'direct', // 'direct' or 'group'
   
   setActiveChat: (chat) => set({ activeChat: chat }),
   
@@ -19,16 +21,31 @@ export const useChatStore = create((set, get) => ({
       },
       chats: chats.map(chat => 
         chat.id === message.chatId 
-          ? { ...chat, lastMessage: message, lastActivity: message.timestamp }
+          ? { ...chat, lastMessage: message, lastActivity: message.timestamp, unreadCount: 0 }
           : chat
       ),
     });
   },
   
-  createChat: (chat) => {
+  createChat: (chatData) => {
     const { chats } = get();
-    set({ chats: [...chats, chat] });
+    const newChat = {
+      ...chatData,
+      id: crypto.randomUUID(),
+      lastActivity: new Date(),
+      unreadCount: 0,
+    };
+    set({ 
+      chats: [newChat, ...chats],
+      activeChat: newChat,
+      showCreateModal: false,
+    });
   },
+  
+  setShowCreateModal: (show, type = 'direct') => set({ 
+    showCreateModal: show, 
+    createModalType: type 
+  }),
   
   addMockData: () => {
     const mockUsers = [
@@ -36,6 +53,7 @@ export const useChatStore = create((set, get) => ({
       { id: '2', name: 'Bob Smith', email: 'bob@example.com', isOnline: false },
       { id: '3', name: 'Carol Davis', email: 'carol@example.com', isOnline: true },
       { id: '4', name: 'David Wilson', email: 'david@example.com', isOnline: true },
+      { id: '5', name: 'Emma Brown', email: 'emma@example.com', isOnline: true },
     ];
     
     const mockChats = [
@@ -62,6 +80,14 @@ export const useChatStore = create((set, get) => ({
         participants: [mockUsers[1]],
         lastActivity: new Date(Date.now() - 1000 * 60 * 60 * 24),
         unreadCount: 0,
+      },
+      {
+        id: '4',
+        name: 'Design Team',
+        type: 'group',
+        participants: [mockUsers[0], mockUsers[4]],
+        lastActivity: new Date(Date.now() - 1000 * 60 * 60 * 6),
+        unreadCount: 1,
       },
     ];
     

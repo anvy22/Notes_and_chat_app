@@ -8,6 +8,8 @@ export const useNotesStore = create(
       activeNote: null,
       searchQuery: '',
       showFavorites: false,
+      selectedCategory: 'all',
+      categories: ['personal', 'work', 'ideas', 'chat-generated'],
       
       setActiveNote: (note) => set({ activeNote: note }),
       
@@ -17,6 +19,7 @@ export const useNotesStore = create(
           id: crypto.randomUUID(),
           createdAt: new Date(),
           updatedAt: new Date(),
+          category: noteData.category || 'personal',
         };
         
         set((state) => ({ 
@@ -57,6 +60,14 @@ export const useNotesStore = create(
       
       setShowFavorites: (show) => set({ showFavorites: show }),
       
+      setSelectedCategory: (category) => set({ selectedCategory: category }),
+      
+      addCategory: (category) => {
+        set((state) => ({
+          categories: [...state.categories, category]
+        }));
+      },
+      
       createNoteFromChat: (chatId, chatName, content) => {
         const { addNote } = get();
         addNote({
@@ -64,6 +75,7 @@ export const useNotesStore = create(
           content,
           isFavorite: false,
           tags: ['chat-generated'],
+          category: 'chat-generated',
           fromChat: { chatId, chatName },
         });
       },

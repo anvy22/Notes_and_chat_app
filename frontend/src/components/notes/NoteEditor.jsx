@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Star, Trash2, Tag, Clock, Hash } from 'lucide-react';
 import { useNotesStore } from '../../store/useNotesStore';
 import { useThemeStore } from '../../store/useThemeStore';
+import { useAppStore } from '../../store/useAppStore';
 import { format } from 'date-fns';
 
 const NoteEditor = () => {
-  const { activeNote, updateNote, deleteNote, toggleFavorite } = useNotesStore();
+  const { activeNote, updateNote, deleteNote, toggleFavorite, categories } = useNotesStore();
   const { isDark } = useThemeStore();
+  const { isMobile } = useAppStore();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState([]);
+  const [category, setCategory] = useState('personal');
   const [newTag, setNewTag] = useState('');
 
   useEffect(() => {
@@ -17,12 +20,13 @@ const NoteEditor = () => {
       setTitle(activeNote.title);
       setContent(activeNote.content);
       setTags(activeNote.tags);
+      setCategory(activeNote.category || 'personal');
     }
   }, [activeNote]);
 
   const handleSave = () => {
     if (!activeNote) return;
-    updateNote(activeNote.id, { title, content, tags });
+    updateNote(activeNote.id, { title, content, tags, category });
   };
 
   const handleAddTag = () => {
@@ -44,6 +48,13 @@ const NoteEditor = () => {
     }
   };
 
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    if (activeNote) {
+      updateNote(activeNote.id, { category: newCategory });
+    }
+  };
+
   const handleDelete = () => {
     if (activeNote && confirm('Are you sure you want to delete this note?')) {
       deleteNote(activeNote.id);
@@ -52,7 +63,7 @@ const NoteEditor = () => {
 
   if (!activeNote) {
     return (
-      <div className={`flex-1 flex items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+      <div className={`flex-1 flex items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-gray-50'} ${isMobile ? 'ml-0' : ''}`}>
         <div className="text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Hash className="w-12 h-12 text-white" />
@@ -69,13 +80,15 @@ const NoteEditor = () => {
   }
 
   return (
-    <div className={`flex-1 flex flex-col ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className={`flex-1 flex flex-col ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}>
       {/* Note Header */}
       <div className={`p-4 border-b ${isDark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'} flex items-center justify-between`}>
         <div className="flex items-center gap-3">
           <Clock className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
           <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Last updated {format(activeNote.updatedAt, 'MMM dd, yyyy HH:mm')}
+            {activeNote.updatedAt && !isNaN(new Date(activeNote.updatedAt)) 
+                       ? format(new Date(activeNote.updatedAt), 'MMM dd, yyyy') 
+                       : 'No Date'}
           </span>
         </div>
         
@@ -114,6 +127,28 @@ const NoteEditor = () => {
             isDark ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'
           }`}
         />
+
+        {/* Category Selection */}
+        <div className="mb-4">
+          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            Category
+          </label>
+          <select
+            value={category}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className={`px-3 py-2 rounded-lg border ${
+              isDark 
+                ? 'bg-gray-800 border-gray-700 text-white' 
+                : 'bg-gray-50 border-gray-200 text-gray-900'
+            } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <textarea
           value={content}
