@@ -12,9 +12,13 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@clerk/backend": "^2.3.1",
+    "cloudinary": "^2.7.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.0.0",
     "express": "^5.1.0",
     "mongoose": "^8.16.1",
+    "multer": "^2.0.1",
     "nodemon": "^3.1.10"
   }
 }
