@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Chat</title></head><body>
+<h1>Chat App</h1>
+<select id="roomSelect"></select>
+<ul id="messages"></ul>
+<form id="msgForm"><input id="sender"><input id="text"><button>Send</button></form>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+const roomSel = document.getElementById('roomSelect');
+fetch('/api/rooms').then(r => r.json()).then(data => {
+  data.forEach(r => { const o = new Option(r.name, r._id); roomSel.add(o); });
+});
+roomSel.onchange = () => {
+  socket.emit('joinRoom', roomSel.value);
+  fetch('/api/messages/' + roomSel.value)
+    .then(r => r.json()).then(m => {
+      document.getElementById('messages').innerHTML = '';
+      m.forEach(x => {
+        const li = document.createElement('li');
+        li.textContent = `[${new Date(x.createdAt).toLocaleTimeString()}] ${x.sender}: ${x.text}`;
+        document.getElementById('messages').appendChild(li);
+      });
+    });
+};
+document.getElementById('msgForm').onsubmit = e => {
+  e.preventDefault();
+  socket.emit('chatMessage', {
+    roomId: roomSel.value,
+    sender: document.getElementById('sender').value,
+    text: document.getElementById('text').value
+  });
+  document.getElementById('text').value = '';
+};
+socket.on('newMessage', msg => {
+  if (msg.room === roomSel.value) {
+    const li = document.createElement('li');
+    li.textContent = `[${new Date(msg.createdAt).toLocaleTimeString()}] ${msg.sender}: ${msg.text}`;
+    document.getElementById('messages').appendChild(li);
+  }
+});
+</script>
+</body></html>
