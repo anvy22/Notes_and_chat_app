@@ -13,7 +13,8 @@ const Settings = () => {
   };
 
   return (
-    <div className={`flex-1 p-6 ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
+    <div className={`flex flex-col ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`} style={{ height: '100vh' }} >
+      <div className="flex-1 overflow-y-auto p-6">
       <div className="max-w-2xl mx-auto">
         <h1 className={`text-3xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           Settings
@@ -162,6 +163,7 @@ const Settings = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 

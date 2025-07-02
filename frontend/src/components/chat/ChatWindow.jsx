@@ -109,7 +109,10 @@ ${chatContent}`;
 
   if (!activeChat) {
     return (
-      <div className={`flex-1 flex items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-gray-50'} ${isMobile ? 'ml-0' : ''}`}>
+      <div
+           className={`flex-1 flex flex-col items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}
+          
+       >
         <div className="text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Send className="w-12 h-12 text-white" />
@@ -126,7 +129,10 @@ ${chatContent}`;
   }
 
   return (
-    <div className={`flex-1 flex flex-col ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}>
+    <div
+           className={` flex-1 flex flex-col ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}
+           style={{ height: '100vh' }} 
+       >
       {/* Chat Header */}
       <div className={`p-4 border-b ${isDark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'} flex items-center justify-between`}>
         <div className="flex items-center gap-3">
@@ -172,7 +178,7 @@ ${chatContent}`;
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
   {chatMessages.map((message) => {
     const isOwn = message.senderId === user?.id;
     return (

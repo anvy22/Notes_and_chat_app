@@ -117,6 +117,7 @@ const NoteEditor = () => {
 
       {/* Note Content */}
       <div className="flex-1 p-6 overflow-y-auto">
+        <div className='flex'>
         <input
           type="text"
           value={title}
@@ -129,10 +130,7 @@ const NoteEditor = () => {
         />
 
         {/* Category Selection */}
-        <div className="mb-4">
-          <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Category
-          </label>
+        <div className="mb-4 mr-3">
           <select
             value={category}
             onChange={(e) => handleCategoryChange(e.target.value)}
@@ -140,32 +138,29 @@ const NoteEditor = () => {
               isDark 
                 ? 'bg-gray-800 border-gray-700 text-white' 
                 : 'bg-gray-50 border-gray-200 text-gray-900'
-            } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
+            } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 `}
           >
             {categories.map((cat) => (
-              <option key={cat} value={cat}>
+              <option key={cat} value={cat} >
                 {cat}
               </option>
             ))}
           </select>
         </div>
-
+        </div>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onBlur={handleSave}
           placeholder="Start writing your note..."
-          className={`w-full h-64 min-h-64 resize-none bg-transparent border-none outline-none text-base leading-relaxed ${
+          className={`w-full h-80 min-h-80 resize-none bg-transparent border-none outline-none text-base leading-relaxed ${
             isDark ? 'text-gray-300 placeholder-gray-400' : 'text-gray-700 placeholder-gray-500'
           }`}
         />
 
         {/* Tags Section */}
-        <div className="mt-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Tag className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
-            <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Tags</h4>
-          </div>
+        <div className="mt-3">
+          
           
           <div className="flex flex-wrap gap-2 mb-3">
             {tags.map((tag) => (
@@ -210,7 +205,7 @@ const NoteEditor = () => {
 
         {/* Chat Origin Info */}
         {activeNote.fromChat && (
-          <div className={`mt-6 p-4 rounded-lg ${
+          <div className={`mt-3 p-4 rounded-lg ${
             isDark ? 'bg-gray-700' : 'bg-blue-50'
           }`}>
             <div className="flex items-center gap-2 mb-2">
