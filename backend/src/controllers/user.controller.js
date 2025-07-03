@@ -4,7 +4,7 @@ import { CloudinaryUpload } from "../utils/Cloudinary.js";
 
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-__v -clerkId");
+    const user = await User.findById(req.user._id).select("-__v -clerkId");
     if (!user)
       return res.status(404).json({ success: false, error: "User not found" });
     res.status(200).json({ success: true, user });
@@ -17,14 +17,13 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { firstName, lastName, bio, settings } = req.body;
+    const { firstName, lastName , username} = req.body;
     const user = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user._id,
       {
         ...(firstName && { firstName }),
         ...(lastName && { lastName }),
-        ...(bio && { bio }),
-        ...(settings && { settings }),
+        ...(username && { username }),
       },
       { new: true }
     ).select("-__v -clerkId");
@@ -69,12 +68,12 @@ export const uploadAvatar = async (req, res) => {
     const Avatar = await CloudinaryUpload(avatarLocalPath)
     const url = Avatar.url
     const user = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user._id,
       { avatar: url },
       { new: true }
     );
 
-    res.status(200).json({ success: true, url });
+    res.status(200).json({ success: true, user});
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: "Avatar upload failed" });

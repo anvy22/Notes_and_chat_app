@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 import { authMiddleware } from '../middleware/authMiddleware.js';
-import { upload } from '../middleware/multerMiddlewear.js';
+import { upload } from '../middleware/multerMiddleware.js';
 import { getProfile,updateProfile,searchUsers,uploadAvatar } from '../controllers/user.controller.js';
 
 router.get('/profile', authMiddleware, getProfile);
