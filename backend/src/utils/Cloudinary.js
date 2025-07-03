@@ -18,7 +18,6 @@ try {
     return respose;
     
 } catch (error) {
-    //logic for unlinc the file
     fs.unlinkSync(uploadFile);
     console.log(error.message);
 }

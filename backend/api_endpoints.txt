@@ -1,0 +1,170 @@
+# API Endpoint Input/Output Details
+
+## Auth Routes
+
+### 1. GET `/api/auth/verify`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+- **Output:**
+  - Success (200):
+    ```json
+    {
+      "user": {
+        "id": "user_id",
+        "email": "user_email",
+        "role": "user_role"
+      }
+    }
+    ```
+  - Error (500):
+    ```json
+    { "error": "Internal server error" }
+    ```
+
+### 2. POST `/api/auth/set-role`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+  - Body:
+    ```json
+    {
+      "userId": "user_id",
+      "role": "user/admin/moderator"
+    }
+    ```
+- **Output:**
+  - Success (200):
+    ```json
+    {
+      "message": "Role updated",
+      "user": { ...userObject }
+    }
+    ```
+  - Error (400):
+    ```json
+    { "error": "Invalid role" }
+    ```
+  - Error (404):
+    ```json
+    { "error": "User not found" }
+    ```
+  - Error (500):
+    ```json
+    { "error": "Internal server error" }
+    ```
+
+### 3. GET `/api/auth/roles`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+- **Output:**
+  - Success (200):
+    ```json
+    [
+      { "email": "user_email", "username": "user_username", "role": "user_role" }
+    ]
+    ```
+  - Error (500):
+    ```json
+    { "error": "Internal server error" }
+    ```
+
+---
+
+## User Routes
+
+### 1. GET `/api/user/profile`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+- **Output:**
+  - Success (200):
+    ```json
+    {
+      "success": true,
+      "user": { ...userObject }
+    }
+    ```
+  - Error (404):
+    ```json
+    { "success": false, "error": "User not found" }
+    ```
+  - Error (500):
+    ```json
+    { "success": false, "error": "Server error" }
+    ```
+
+### 2. PUT `/api/user/profile`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+  - Body:
+    ```json
+    {
+      "firstName": "new_firstName",
+      "lastName": "new_lastName",
+      "username": "new_username"
+    }
+    ```
+- **Output:**
+  - Success (200):
+    ```json
+    {
+      "success": true,
+      "user": { ...updatedUserObject }
+    }
+    ```
+  - Error (404):
+    ```json
+    { "success": false, "error": "User not found" }
+    ```
+  - Error (500):
+    ```json
+    { "success": false, "error": "Server error" }
+    ```
+
+### 3. GET `/api/user/search`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+  - Query Parameters:
+    - `q`: Search term (optional)
+    - `limit`: Number of results (optional, default: 10)
+- **Output:**
+  - Success (200):
+    ```json
+    {
+      "success": true,
+      "users": [
+        { "username": "user_username", "avatar": "avatar_url", "isOnline": true }
+      ]
+    }
+    ```
+  - Error (500):
+    ```json
+    { "success": false, "error": "Server error" }
+    ```
+
+### 4. POST `/api/user/upload-avatar`
+- **Input:**
+  - Headers:
+    - `Authorization`: Bearer <token>
+  - Form Data:
+    - `avatar`: File (image)
+- **Output:**
+  - Success (200):
+    ```json
+    {
+      "success": true,
+      "user": { ...userObjectWithAvatar }
+    }
+    ```
+  - Error (400):
+    ```json
+    { "success": false, "error": "Avatar LocalPath Are Require" }
+    ```
+  - Error (500):
+    ```json
+    { "success": false, "error": "Avatar upload failed" }
+    ```
