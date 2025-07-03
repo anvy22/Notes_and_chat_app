@@ -23,15 +23,15 @@ const NotesList = () => {
 
   const filteredNotes = useMemo(() => {
     let filtered = notes;
-    
+
     if (showFavorites) {
       filtered = filtered.filter(note => note.isFavorite);
     }
-    
+
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(note => note.category === selectedCategory);
     }
-    
+
     if (searchQuery) {
       filtered = filtered.filter(note =>
         note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -39,7 +39,7 @@ const NotesList = () => {
         note.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
-    
+
     return filtered;
   }, [notes, searchQuery, showFavorites, selectedCategory]);
 
@@ -61,9 +61,9 @@ const NotesList = () => {
   };
 
   return (
-   <div className={`w-full lg:w-80 ${isDark ? 'bg-gray-900' : 'bg-white'} border-r ${isDark ? 'border-gray-800' : 'border-gray-200'} flex flex-col`} style={{ height: '100vh' }}>
+    <div className={`w-full lg:w-80 ${isDark ? 'bg-gray-900' : 'bg-white'} border-r ${isDark ? 'border-gray-800' : 'border-gray-200'} flex flex-col overflow-hidden`}>
       <div className="p-4 border-b border-gray-200 dark:border-gray-800">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 pl-10">
           <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
             Notes
           </h2>
@@ -74,7 +74,7 @@ const NotesList = () => {
             <Plus className="w-5 h-5" />
           </button>
         </div>
-        
+
         <div className="relative mb-4">
           <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
           <input
@@ -83,8 +83,8 @@ const NotesList = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-              isDark 
-                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
+              isDark
+                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
                 : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
             } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
           />
@@ -125,7 +125,7 @@ const NotesList = () => {
               {searchQuery ? 'No notes found' : showFavorites ? 'No favorite notes' : 'No notes yet'}
             </p>
             {!searchQuery && (
-              <button 
+              <button
                 onClick={handleNewNote}
                 className="mt-2 text-purple-600 hover:text-purple-700 text-sm font-medium"
               >
@@ -152,18 +152,18 @@ const NotesList = () => {
                   <Star className="w-4 h-4 text-yellow-500 fill-current" />
                 )}
               </div>
-              
+
               <p className={`text-sm line-clamp-2 mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 {note.content || 'No content'}
               </p>
-              
+
               <div className="flex items-center justify-between text-xs mb-2">
                 <span className={isDark ? 'text-gray-500' : 'text-gray-400'}>
                   {note.updatedAt && !isNaN(new Date(note.updatedAt).getTime())
-                      ? format(new Date(note.updatedAt), 'MMM dd, yyyy')
-                      : 'Unknown'}
+                    ? format(new Date(note.updatedAt), 'MMM dd, yyyy')
+                    : 'Unknown'}
                 </span>
-                
+
                 {note.tags.length > 0 && (
                   <div className="flex items-center gap-1">
                     <Hash className="w-3 h-3" />
@@ -182,7 +182,7 @@ const NotesList = () => {
                     {note.category}
                   </span>
                 )}
-                
+
                 {note.fromChat && (
                   <div className={`text-xs px-2 py-1 rounded ${
                     isDark ? 'bg-purple-900 text-purple-300' : 'bg-purple-100 text-purple-700'

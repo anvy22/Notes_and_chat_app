@@ -12,7 +12,7 @@ import SettingsPage from './pages/SettingsPage';
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!CLERK_PUBLISHABLE_KEY) {
-  throw new Error('Missing Publishable Key');
+  throw new Error('Missing Clerk Publishable Key');
 }
 
 const AppContent = () => {
@@ -23,7 +23,7 @@ const AppContent = () => {
   }, [isDark]);
 
   return (
-    <div className={`min-h-screen flex  ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen flex ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <SignedIn>
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0 relative">
@@ -36,13 +36,20 @@ const AppContent = () => {
           </Routes>
         </div>
       </SignedIn>
+
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
+
       <Toaster
         position="top-right"
         toastOptions={{
           className: isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900',
+          style: {
+            borderRadius: '8px',
+            padding: '12px 16px',
+            fontSize: '14px',
+          },
         }}
       />
     </div>

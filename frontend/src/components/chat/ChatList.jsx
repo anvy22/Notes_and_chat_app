@@ -32,8 +32,9 @@ const ChatList = ({ type }) => {
 
   return (
     <>
-      <div className={`w-full lg:w-80 ${isDark ? 'bg-gray-900' : 'bg-white'} border-r ${isDark ? 'border-gray-800' : 'border-gray-200'} flex flex-col`} style={{ height: '100vh' }}>
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+    <div className={`w-full sm:w-96 ${isDark ? 'bg-gray-900' : 'bg-white'} border-r ${isDark ? 'border-gray-800' : 'border-gray-200'} flex flex-col max-h-screen pt-16 lg:pt-0`}>
+
+         <div className="p-4 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center justify-between mb-4">
             <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
               {type === 'direct' ? 'Direct Messages' : 'Group Chats'}

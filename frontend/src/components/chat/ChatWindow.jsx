@@ -51,7 +51,6 @@ const ChatWindow = () => {
     const file = event.target.files[0];
     if (!file || !activeChat || !user) return;
 
-    // Create a file message
     const message = {
       id: crypto.randomUUID(),
       content: `📎 ${file.name}`,
@@ -69,8 +68,7 @@ const ChatWindow = () => {
 
     addMessage(message);
     toast.success('File uploaded successfully!');
-    
-    // Reset file input
+
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -81,13 +79,12 @@ const ChatWindow = () => {
 
     setIsCreatingNote(true);
     try {
-      // Simulate AI processing
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       const chatContent = chatMessages
         .map(msg => `${msg.senderName}: ${msg.content}`)
         .join('\n\n');
-      
+
       const summary = `Chat Summary - ${format(new Date(), 'MMM dd, yyyy')}
 
 Key Discussion Points:
@@ -109,10 +106,7 @@ ${chatContent}`;
 
   if (!activeChat) {
     return (
-      <div
-           className={`flex-1 flex flex-col items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}
-          
-       >
+      <div className={`flex-1 flex flex-col items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}>
         <div className="text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Send className="w-12 h-12 text-white" />
@@ -129,16 +123,13 @@ ${chatContent}`;
   }
 
   return (
-    <div
-           className={` flex-1 flex flex-col ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`}
-           style={{ height: '100vh' }} 
-       >
+    <div className={`flex-1 flex flex-col ${isDark ? 'bg-gray-800' : 'bg-white'} ${isMobile ? 'ml-0' : ''}`} style={{ height: '100dvh', maxHeight: '100dvh' }}>
       {/* Chat Header */}
       <div className={`p-4 border-b ${isDark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'} flex items-center justify-between`}>
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-            activeChat.type === 'group' 
-              ? 'bg-gradient-to-br from-green-400 to-emerald-600' 
+            activeChat.type === 'group'
+              ? 'bg-gradient-to-br from-green-400 to-emerald-600'
               : 'bg-gradient-to-br from-purple-400 to-pink-600'
           }`}>
             <span className="text-white font-semibold">
@@ -150,14 +141,13 @@ ${chatContent}`;
               {activeChat.name}
             </h3>
             <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              {activeChat.type === 'group' 
+              {activeChat.type === 'group'
                 ? `${activeChat.participants.length} members`
-                : activeChat.participants[0]?.isOnline ? 'Online' : 'Offline'
-              }
+                : activeChat.participants[0]?.isOnline ? 'Online' : 'Offline'}
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <button
             onClick={handleCreateNoteFromChat}
@@ -178,60 +168,56 @@ ${chatContent}`;
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
-  {chatMessages.map((message) => {
-    const isOwn = message.senderId === user?.id;
-    return (
-      <div key={message.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
-        <div
-          className={`relative max-w-xs lg:max-w-md px-4 py-2 pb-5 break-words shadow-sm
-            rounded-2xl ${
-              isOwn
-                ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-br-none'
-                : isDark
-                  ? 'bg-gray-700 text-white rounded-bl-none'
-                  : 'bg-gray-100 text-gray-900 rounded-bl-none'
-            }`}
-        >
-          {/* Group sender name */}
-          {!isOwn && activeChat.type === 'group' && (
-            <p className="text-xs font-semibold mb-1 text-purple-500">
-              {message.senderName}
-            </p>
-          )}
+      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-4 sm:px-4 min-h-0">
+        {chatMessages.map((message) => {
+          const isOwn = message.senderId === user?.id;
+          return (
+            <div key={message.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
+              <div
+                className={`relative max-w-[85%] sm:max-w-[70%] md:max-w-md px-4 py-2 pb-5 break-words shadow-sm
+                rounded-2xl ${
+                  isOwn
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-br-none'
+                    : isDark
+                      ? 'bg-gray-700 text-white rounded-bl-none'
+                      : 'bg-gray-100 text-gray-900 rounded-bl-none'
+                }`}
+              >
+                {!isOwn && activeChat.type === 'group' && (
+                  <p className="text-xs font-semibold mb-1 text-purple-500">
+                    {message.senderName}
+                  </p>
+                )}
 
-          {/* File or text content */}
-          {message.type === 'file' ? (
-            <div className="flex items-center gap-2">
-              {message.fileData?.type?.startsWith('image/') ? (
-                <Image className="w-4 h-4" />
-              ) : (
-                <File className="w-4 h-4" />
-              )}
-              <span className="text-sm">{message.content}</span>
+                {message.type === 'file' ? (
+                  <div className="flex items-center gap-2">
+                    {message.fileData?.type?.startsWith('image/') ? (
+                      <Image className="w-4 h-4" />
+                    ) : (
+                      <File className="w-4 h-4" />
+                    )}
+                    <span className="text-sm">{message.content}</span>
+                  </div>
+                ) : (
+                  <p className="text-sm">{message.content}</p>
+                )}
+
+                <p
+                  className={`text-[10px] absolute bottom-1 right-3 ${
+                    isOwn ? 'text-purple-200' : isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}
+                >
+                  {format(message.timestamp, 'HH:mm')}
+                </p>
+              </div>
             </div>
-          ) : (
-            <p className="text-sm">{message.content}</p>
-          )}
-
-          {/* Timestamp */}
-          <p
-            className={`text-[10px] absolute bottom-1 right-3 ${
-              isOwn ? 'text-purple-200' : isDark ? 'text-gray-400' : 'text-gray-500'
-            }`}
-          >
-            {format(message.timestamp, 'HH:mm')}
-          </p>
-        </div>
+          );
+        })}
+        <div ref={messagesEndRef} />
       </div>
-    );
-  })}
-  <div ref={messagesEndRef} />
-</div>
-
 
       {/* Message Input */}
-      <div className={`p-4 border-t ${isDark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'}`}>
+      <div className={`p-4 border-t sticky bottom-0 z-10 backdrop-blur bg-opacity-90 ${isDark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'}`}>
         <div className="flex items-center gap-2">
           <input
             type="file"
@@ -240,14 +226,14 @@ ${chatContent}`;
             className="hidden"
             accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
           />
-          
+
           <button
             onClick={() => fileInputRef.current?.click()}
             className={`p-2 rounded-lg ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} transition-colors`}
           >
             <Paperclip className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
           </button>
-          
+
           <div className="flex-1 relative">
             <input
               type="text"
@@ -255,16 +241,20 @@ ${chatContent}`;
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="Type a message..."
+              inputMode="text"
+              autoComplete="off"
+              autoCorrect="on"
+              spellCheck={true}
               className={`w-full px-4 py-2 rounded-lg border ${
-                isDark 
-                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
+                isDark
+                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
                   : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
               } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
             />
           </div>
-          
+
           <EmojiPicker onEmojiSelect={handleEmojiSelect} />
-          
+
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim()}

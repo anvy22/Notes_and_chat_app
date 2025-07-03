@@ -10,8 +10,9 @@ const CategoryManager = () => {
   const [newCategory, setNewCategory] = useState('');
 
   const handleAddCategory = () => {
-    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
-      addCategory(newCategory.trim());
+    const trimmed = newCategory.trim();
+    if (trimmed && !categories.includes(trimmed)) {
+      addCategory(trimmed);
       setNewCategory('');
       setShowAddCategory(false);
     }
@@ -26,7 +27,7 @@ const CategoryManager = () => {
   };
 
   return (
-    <div className="mb-4">
+    <div className="pt-16 lg:pt-0 mb-4">
       <div className="flex items-center gap-2 mb-3">
         <Tag className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
         <h4 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Categories</h4>
@@ -38,7 +39,8 @@ const CategoryManager = () => {
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      {/* Categories Scrollable */}
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
         <button
           onClick={() => setSelectedCategory('all')}
           className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
@@ -48,7 +50,7 @@ const CategoryManager = () => {
           }`}
         >
           <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-          All
+          <span className="truncate max-w-[120px]">All</span>
         </button>
 
         {categories.map((category) => (
@@ -62,18 +64,19 @@ const CategoryManager = () => {
             }`}
           >
             <div className={`w-2 h-2 rounded-full ${categoryColors[category] || 'bg-gray-400'}`}></div>
-            {category}
+            <span className="truncate max-w-[120px]">{category}</span>
           </button>
         ))}
       </div>
 
+      {/* Add Category Form */}
       {showAddCategory && (
         <div className="mt-3 flex gap-2">
           <input
             type="text"
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleAddCategory()}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddCategory()}
             placeholder="Category name..."
             className={`flex-1 px-3 py-1 text-sm rounded border ${
               isDark 

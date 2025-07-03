@@ -16,12 +16,12 @@ const CreateChatModal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (createModalType === 'direct' && selectedUsers.length !== 1) {
       toast.error('Please select exactly one user for direct chat');
       return;
     }
-    
+
     if (createModalType === 'group' && (!chatName.trim() || selectedUsers.length < 2)) {
       toast.error('Please enter a group name and select at least 2 users');
       return;
@@ -37,13 +37,14 @@ const CreateChatModal = () => {
     setChatName('');
     setSelectedUsers([]);
     toast.success(`${createModalType === 'direct' ? 'Chat' : 'Group'} created successfully!`);
+    setShowCreateModal(false);
   };
 
   const toggleUserSelection = (selectedUser) => {
-    setSelectedUsers(prev => {
-      const isSelected = prev.find(u => u.id === selectedUser.id);
+    setSelectedUsers((prev) => {
+      const isSelected = prev.find((u) => u.id === selectedUser.id);
       if (isSelected) {
-        return prev.filter(u => u.id !== selectedUser.id);
+        return prev.filter((u) => u.id !== selectedUser.id);
       } else {
         return createModalType === 'direct' ? [selectedUser] : [...prev, selectedUser];
       }
@@ -51,8 +52,9 @@ const CreateChatModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className={`${isDark ? 'bg-gray-900' : 'bg-white'} rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto`}>
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className={`${isDark ? 'bg-gray-900' : 'bg-white'} w-full max-w-md rounded-xl p-6 max-h-[90dvh] overflow-y-auto`}>
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             {createModalType === 'group' ? (
@@ -71,17 +73,21 @@ const CreateChatModal = () => {
             <X className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} />
           </button>
         </div>
-         <div className=''>
-             <input
-              type="text"
-              placeholder="Search peoples..."
-              className={`w-full pl-10 pr-4 py-2 rounded-lg border mb-2 ${
-                isDark 
-                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
-                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-              } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
-            />
-          </div>
+
+        {/* Search Input (non-functional placeholder) */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search people..."
+            className={`w-full pl-4 pr-4 py-2 rounded-lg border ${
+              isDark
+                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
+                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+            } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
+          />
+        </div>
+
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {createModalType === 'group' && (
             <div>
@@ -94,8 +100,8 @@ const CreateChatModal = () => {
                 onChange={(e) => setChatName(e.target.value)}
                 placeholder="Enter group name..."
                 className={`w-full px-3 py-2 rounded-lg border ${
-                  isDark 
-                    ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
+                  isDark
+                    ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
                     : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
                 } focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200`}
                 required
@@ -105,18 +111,16 @@ const CreateChatModal = () => {
 
           <div>
             <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Select {createModalType === 'direct' ? 'User' : 'Users'} 
-              {createModalType === 'direct' && ' (1 user)'}
-              {createModalType === 'group' && ' (minimum 2 users)'}
+              Select {createModalType === 'direct' ? 'User' : 'Users'}
             </label>
-            <div className="space-y-2 max-h-48 overflow-y-auto">
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
               {users.filter(u => u.id !== user?.id).map((chatUser) => (
                 <div
                   key={chatUser.id}
                   onClick={() => toggleUserSelection(chatUser)}
                   className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                     selectedUsers.find(u => u.id === chatUser.id)
-                      ? 'bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 border'
+                      ? 'bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200'
                       : isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-50'
                   }`}
                 >
@@ -153,8 +157,8 @@ const CreateChatModal = () => {
               type="button"
               onClick={() => setShowCreateModal(false)}
               className={`flex-1 px-4 py-2 rounded-lg border ${
-                isDark 
-                  ? 'border-gray-700 text-gray-300 hover:bg-gray-800' 
+                isDark
+                  ? 'border-gray-700 text-gray-300 hover:bg-gray-800'
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
               } transition-colors`}
             >
