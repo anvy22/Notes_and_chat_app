@@ -11,14 +11,15 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^4.29.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^2.30.0",
+    "emoji-picker-react": "^4.5.16",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.20.1",
-    "zustand": "^4.4.7",
-    "date-fns": "^2.30.0",
     "react-hot-toast": "^2.4.1",
-    "emoji-picker-react": "^4.5.16"
+    "react-router-dom": "^6.20.1",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
